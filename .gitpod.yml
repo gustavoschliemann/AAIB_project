@@ -1,10 +1,23 @@
 tasks:
-  - name: Terminal 1
-    init: echo 'before script'
-    command: echo 'init script'
-  - name: Terminal 2
-    init: npm install
-    command: npm run dev
+  - init: 
+      sudo pip3 install streamlit
+      sudo apt install -y mosquitto
+      sudo apt install mosquitto-clients
+      sudo service mosquitto start
+      sudo service mosquitto status
+      sudo pip3 install paho-mqtt
+      git clone https://github.com/eclipse/paho.mqtt.python.git
+      cd paho.mqtt.python
+      python setup.py install
+      sudo apt-get install libsndfile1
+      sudo pip install librosa
+      pip install numpy
+      pip install matplotlib.pyplot
+    
+  - command:
+      streamlit run subscribe.py
+
+
 ports:
   - port: 8501
     onOpen: open-preview
