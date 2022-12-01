@@ -6,12 +6,12 @@ tasks:
       sudo service mosquitto start
       sudo service mosquitto status
       sudo pip3 install paho-mqtt
+      sudo apt-get install libsndfile1
+      sudo pip install librosa
       git clone https://github.com/eclipse/paho.mqtt.python.git
       cd paho.mqtt.python
       python setup.py install
-      sudo apt-get install libsndfile1
-      sudo pip install librosa
-    
+      cd ..
     command:
       streamlit run sub.py
 
