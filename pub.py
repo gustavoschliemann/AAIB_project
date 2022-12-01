@@ -2,12 +2,13 @@ from paho.mqtt import client as mqtt_client
 import numpy as np
 import librosa
 import threading
-import time
 import sounddevice as sd
+import json
 
 broker = 'mqtt.eclipseprojects.io'
 port = 1883
-topic = "AAIB/project"
+topic_sub = "AAIB/project/sub"
+topic_start = "AAIB/project/pub"
 
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
@@ -22,40 +23,39 @@ def connect_mqtt():
     return client
 
 def publish(msg):
-    result = client.publish(topic,msg)
+    result = client.publish(topic_sub,msg)
     msg_status = result[0]
     if msg_status ==0:
-        print(f"Message sent to topic {topic}")
+        print(f"Message sent to topic {topic_sub}")
     else:
-        print(f"Failed to send message to topic {topic}")
+        print(f"Failed to send message to topic {topic_sub}")
 
 def on_message(client, userdata, msg):
     if str(msg.payload.decode('latin1')) == 'Start':
         audio_rec()
         
 def subscribe():  
-    client.subscribe(topic)
+    client.subscribe(topic_start)
     client.on_message = on_message
     client.loop_forever()
+    
+# adjustments made to the recording to fit the librosa.stft format on line 53
 
 def audio_rec():
-    FRAME_SIZE = 512
-    HOP_SIZE = 128
+    FRAME_SIZE = 2048
+    HOP_SIZE = 512
     duration = 5  #seconds
-    fs = 1024
-    #print("Recording...")
-    #record = sd.rec(int(duration * fs), samplerate=fs, channels=2)
-    #sd.wait()
-    #print("Finished")
-    #S = np.abs(librosa.stft(record.astype('float32'), n_fft = FRAME_SIZE, hop_length= HOP_SIZE)) ** 2
-    #print(np.shape(S.transpose()[0].transpose()))
-    #print(S.transpose()[0])
-    #Y_scale_send = [[str(element) for element in index]for index in Y_scale]
-    #publish(str(S.tolist()))
-    publish('ola')
+    fs = 22050
+    print("Recording...")
+    record = sd.rec(int(duration * fs), samplerate=fs, channels=1)
+    sd.wait()
+    print("Finished")
+    S = np.abs(librosa.stft(record.transpose()[0].astype('float32'), n_fft = FRAME_SIZE, hop_length= HOP_SIZE))
+    power = librosa.power_to_db(S**2, ref=np.max)
+    msg = json.dumps(power.tolist())
+    publish(msg)
 
 client = connect_mqtt()  
 
 sub=threading.Thread(target=subscribe)
-pub=threading.Thread(target=publish, args=(1,))
 sub.start()
