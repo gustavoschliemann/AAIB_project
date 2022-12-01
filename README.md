@@ -13,3 +13,5 @@ Funcionamento:
 2. Corra a aplicação através do URL https://gitpod.io/#github.com/gustavoschliemann/AAIB_project
 
 3. Inicie uma gravação. Ao final, os dados de cada gravação são gravados e podem ser baixados com um ficheiro .csv. 
+
+4. Após o término, a aplicação está pronta para efetuar uma nova gravação.
