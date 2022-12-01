@@ -88,8 +88,6 @@ st.title("Real-Time Audio Recorder using Paho MQTT")
 st.write(
     'This is a project developed for the subject of AIIB at FCT-UNL'
 )
-text_contents = '''This is some text'''
-st.download_button('Download some text', text_contents)
 
 placeholder = st.empty()
 
@@ -109,10 +107,10 @@ with placeholder.container():
             df = pd.DataFrame(data = st.session_state.download)
             csv= convert_df(df)
             #st.write(csv)
-            #st.download_button(
-            #label="Download data as CSV",
-            #data=csv,
-            #file_name='data.csv',
-            #mime='text/csv',
-        #)
+            st.download_button(
+            label="Download data as CSV",
+            data=csv,
+            file_name='data.csv',
+            mime='text/csv',
+        )
             
