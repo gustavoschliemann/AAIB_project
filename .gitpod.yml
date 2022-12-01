@@ -15,7 +15,7 @@ tasks:
       sudo pip install matplotlib
     
   - command:
-      streamlit run subscribe.py
+      streamlit run sub.py
 
 
 ports:
