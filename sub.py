@@ -42,7 +42,7 @@ def on_message(client, userdata, msg):
         #download(np_data)
     if 'download' not in st.session_state:
         st.session_state.download = np_data
-        download(np_data)
+        #download(np_data)
         #st.session_state.download = threading.Thread(target=download, args=(1,))
         #add_script_run_ctx(st.session_state.download)
         #st.session_state.download.start()
@@ -65,19 +65,13 @@ def display(data):
     fig.colorbar(imgdb, ax=ax, format="%+2.0f dB")
     st.pyplot(fig)
 
-def download(data):
-    st.write(type(st.session_state.download))
-    #df = pd.DataFrame(data = data)
-    #csv = df.to_csv().encode('utf-8')
-    #st.download_button(
-        #label="Download data as CSV",
-        #data=csv,
-        #file_name='data.csv',
-        #mime='text/csv',
-    #)
+@st.cache
+def convert_df(df):
+
+    return df.to_csv().encode('utf-8')
 
 def mqtt_thread():
-    for i in range(10):
+    for i in range(8):
         if 'mqttThread' not in st.session_state:
             st.session_state.mqttThread = threading.Thread(target=subscribe)
             add_script_run_ctx(st.session_state.mqttThread)
@@ -94,6 +88,8 @@ st.title("Real-Time Audio Recorder using Paho MQTT")
 st.write(
     'This is a project developed for the subject of AIIB at FCT-UNL'
 )
+text_contents = '''This is some text'''
+st.download_button('Download some text', text_contents)
 
 placeholder = st.empty()
 
@@ -108,3 +104,15 @@ with placeholder.container():
             placeholder2 = st.empty()
             mqtt_thread()
 
+    with col2:
+        if 'download' in st.session_state:
+            df = pd.DataFrame(data = st.session_state.download)
+            csv= convert_df(df)
+            #st.write(csv)
+            #st.download_button(
+            #label="Download data as CSV",
+            #data=csv,
+            #file_name='data.csv',
+            #mime='text/csv',
+        #)
+            
