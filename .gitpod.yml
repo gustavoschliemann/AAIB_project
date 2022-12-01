@@ -20,4 +20,4 @@ tasks:
 
 ports:
   - port: 8501
-    onOpen: open-preview
+    onOpen: open-browser
