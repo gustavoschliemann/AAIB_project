@@ -1,5 +1,5 @@
 tasks:
-  - init: 
+  - init:  |
       sudo pip3 install streamlit
       sudo apt install -y mosquitto
       sudo apt install mosquitto-clients
@@ -11,12 +11,9 @@ tasks:
       python setup.py install
       sudo apt-get install libsndfile1
       sudo pip install librosa
-      sudo pip install numpy
-      sudo pip install matplotlib
     
     command:
       streamlit run sub.py
-
 
 ports:
   - port: 8501
