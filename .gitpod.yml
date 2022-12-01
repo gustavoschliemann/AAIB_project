@@ -14,7 +14,7 @@ tasks:
       sudo pip install numpy
       sudo pip install matplotlib
     
-  - command:
+    command:
       streamlit run sub.py
 
 
